@@ -106,7 +106,7 @@ def convert_doc_to_pdf(file_type, uploaded_file):
 
 def invoke_lambda_function(payload):
     try:
-        client = boto3.client('lambda')
+        client = boto3.client('lambda', region_name='eu-north-1')
         response = client.invoke(
             FunctionName='generate-pdf',
             Payload=json.dumps(payload)
