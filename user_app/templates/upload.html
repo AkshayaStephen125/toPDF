@@ -1,0 +1,194 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PDF Generator</title>
+<link rel="stylesheet" type="text/css" href="{% static 'css/upload.css' %}">
+</head>
+
+<body>
+
+<div class="header">
+    <h2 id="title"></h2>
+    <p id="description"></p>
+</div>
+
+<div class="container">
+{% if type == 'text' %}
+<form enctype="multipart/form-data">
+    {% csrf_token %}
+
+   <textarea id="text-input" name="text" placeholder="Type or paste your text here..."></textarea> 
+
+    <button type="button" onclick="upload_text()">Upload & Generate PDF</button>
+
+    <div class="loader" id="loader"></div>
+
+    <div class="result" id="result">
+        <p id="result-message"></p>
+        <a id="download-btn" href="#" target="_blank" style="display:none;">
+            <button type="button">Download File</button>
+        </a>
+    </div>
+</form>
+{% else %}
+<form enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="drop-zone" id="drop-zone">
+        <p id="file-name">Drag & drop your file here</p>
+        <br>
+        <label class="browse-btn">
+            Choose File
+            <input type="file" id="file-input">
+        </label>
+    </div>
+
+    <button type="button" onclick="upload()">Upload & Generate PDF</button>
+
+    <div class="loader" id="loader"></div>
+
+    <div class="result" id="result">
+        <p id="result-message"></p>
+        <a id="download-btn" href="#" target="_blank" style="display:none;">
+            <button type="button">Download File</button>
+        </a>
+    </div>
+</form>
+{% endif %}
+</div>
+
+<script>
+const type = "{{ type|escapejs }}";
+
+const contentMap = {
+    text: { title: "Text to PDF", desc: "Upload a text file and convert it into PDF" },
+    image: { title: "Image to PDF", desc: "Convert images into PDF" },
+    doc: { title: "Document to PDF", desc: "Convert documents into PDF" }
+};
+
+document.getElementById("title").innerText = contentMap[type].title;
+document.getElementById("description").innerText = contentMap[type].desc;
+
+const fileInput = document.getElementById("file-input");
+const fileName = document.getElementById("file-name");
+const loader = document.getElementById("loader");
+const resultBox = document.getElementById("result");
+const resultMessage = document.getElementById("result-message");
+const downloadBtn = document.getElementById("download-btn");
+
+/* Drag & Drop */
+const dropZone = document.getElementById("drop-zone");
+
+dropZone.addEventListener("dragover", e => {
+    e.preventDefault();
+    dropZone.classList.add("dragover");
+});
+
+dropZone.addEventListener("dragleave", () => {
+    dropZone.classList.remove("dragover");
+});
+
+dropZone.addEventListener("drop", e => {
+    e.preventDefault();
+    dropZone.classList.remove("dragover");
+    fileInput.files = e.dataTransfer.files;
+    fileName.innerText = fileInput.files[0].name;
+});
+
+fileInput.addEventListener("change", () => {
+    fileName.innerText = fileInput.files[0].name;
+});
+
+/* Upload */
+
+function upload_text() {
+    const text = document.getElementById("text-input").value;
+
+    if (!text.trim()) {
+        alert("Please enter some text");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("text", text);
+    formData.append("type", type);
+
+    loader.style.display = "block";
+    resultBox.style.display = "none";
+
+    fetch("{% url 'generate_pdf' %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        loader.style.display = "none";
+        resultBox.style.display = "block";
+
+        resultMessage.innerText = data.message;
+
+        if (data.result) {
+            downloadBtn.style.display = "inline-block";
+            downloadBtn.href = data.download_url || "#";
+        } else {
+            downloadBtn.style.display = "none";
+        }
+    })
+    .catch(() => {
+        loader.style.display = "none";
+        resultBox.style.display = "block";
+        resultMessage.innerText = "Server error";
+        downloadBtn.style.display = "none";
+    });
+}
+
+function upload() {
+    if (!fileInput.files.length) {
+        alert("Please select a file");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+    formData.append("type", type);
+
+    loader.style.display = "block";
+    resultBox.style.display = "none";
+
+    fetch("{% url 'generate_pdf' %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        loader.style.display = "none";
+        resultBox.style.display = "block";
+
+        resultMessage.innerText = data.message;
+
+        if (data.result) {
+            downloadBtn.style.display = "inline-block";
+            downloadBtn.href = data.download_url || "#";
+        } else {
+            downloadBtn.style.display = "none";
+        }
+    })
+    .catch(() => {
+        loader.style.display = "none";
+        resultBox.style.display = "block";
+        resultMessage.innerText = "Server error ❌";
+        downloadBtn.style.display = "none";
+    });
+}
+</script>
+
+</body>
+</html>

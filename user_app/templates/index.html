@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PDF Generator</title>
+<link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+</head>
+<body style="background: url('{% static 'images/hero.png' %}') no-repeat center center fixed;">
+
+<div class="card-container">
+    <div class="card" onclick="go('text')">
+        <h3>Text to PDF</h3>
+        <p>Convert plain text files into PDF format</p>
+    </div>
+
+    <div class="card" onclick="go('image')">
+        <h3>Image to PDF</h3>
+        <p>Transform images into high-quality PDFs</p>
+    </div>
+
+    <div class="card" onclick="go('doc')">
+        <h3>Document to PDF</h3>
+        <p>Convert documents into PDF files</p>
+    </div>
+</div>
+
+<script>
+function go(type) {
+    window.location.href = "/upload/" + type;
+}
+</script>
+
+</body>
+</html>
