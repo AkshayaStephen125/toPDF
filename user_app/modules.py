@@ -1,6 +1,3 @@
-from user_app.models import UploadedFile
-from fpdf import FPDF
-from io import BytesIO
 import base64
 import boto3
 import json
