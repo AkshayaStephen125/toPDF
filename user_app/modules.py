@@ -1,6 +1,7 @@
 import base64
 import boto3
 import json
+from botocore.client import Config
 
 def convert_to_pdf(file_type, uploaded_file):
     download_url = ''
@@ -121,9 +122,11 @@ def generate_download_url(response):
     body = json.loads(payload["body"])
 
     s3_key = body["s3_key"]
-    s3 = boto3.client("s3")
+    s3 = boto3.client("s3", region_name="eu-north-1", endpoint_url="https://s3.eu-north-1.amazonaws.com",
+        config=Config(signature_version="s3v4"))  
+    
     return s3.generate_presigned_url(
-        "get_object",
+        ClientMethod="get_object",
         Params={"Bucket": 'pdfy-it', "Key": s3_key},
         ExpiresIn=300 
     )
