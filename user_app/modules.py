@@ -127,7 +127,9 @@ def generate_download_url(response):
     
     return s3.generate_presigned_url(
         ClientMethod="get_object",
-        Params={"Bucket": 'pdfy-it', "Key": s3_key},
+        Params={"Bucket": 'pdfy-it', 
+                "Key": s3_key,
+                'ResponseContentDisposition': f'attachment; filename="{s3_key.split("/")[-1]}"'},
         ExpiresIn=300 
     )
 

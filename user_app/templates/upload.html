@@ -10,8 +10,19 @@
 <body>
 
 <div class="header">
-    <h2 id="title"></h2>
-    <p id="description"></p>
+    <div class="header-inner">
+        <nav class="breadcrumb">
+            <a href="{% url 'index' %}">Home</a>
+            <span class="separator">/</span>
+            <span id="breadcrumb-current"></span>
+        </nav>
+
+        <h2 id="title"></h2>
+        <p id="description"></p>
+    </div>
+</div>
+
+
 </div>
 
 <div class="container">

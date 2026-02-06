@@ -4,11 +4,53 @@ body {
     background: #f6f6f6;
 }
 
+/* Full-width red header */
 .header {
-    background: #c62828;
+    width: 100%;
+    background: #c62828; /* professional red */
     color: white;
-    padding: 30px;
-    text-align: center;
+}
+
+/* Centered content */
+.header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 20px 32px;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    font-size: 14px;
+    margin-bottom: 12px;
+    opacity: 0.9;
+}
+
+.breadcrumb a {
+    color: #ffecec;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb .separator {
+    margin: 0 6px;
+    opacity: 0.8;
+}
+
+/* Title */
+.header h2 {
+    font-size: 32px;
+    margin: 0 0 6px;
+    font-weight: 600;
+}
+
+/* Description */
+.header p {
+    font-size: 16px;
+    opacity: 0.9;
+    margin: 0;
 }
 
 .container {
@@ -87,4 +129,16 @@ button {
 .result p {
     font-weight: 600;
     margin-bottom: 15px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    text-decoration: underline;
 }
