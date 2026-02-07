@@ -17,7 +17,7 @@ def convert_to_pdf(file_type, uploaded_file):
             case _:
                 return False, "Invalid file type"
         if result:
-            return True, "Your PDF is ready", download_url
+            return True, "Your PDF is ready!", download_url
         else:
             return False, message, download_url
     except Exception as e:
