@@ -1,1 +1,0 @@
-{"errorMessage": "Syntax error in module 'lambda_function': invalid syntax. Maybe you meant '==' or ':=' instead of '='? (lambda_function.py, line 48)", "errorType": "Runtime.UserCodeSyntaxError", "requestId": "", "stackTrace": ["  File \"/var/task/lambda_function.py\" Line 48\n        result = False, message = '', file_name = ''\n"]}
